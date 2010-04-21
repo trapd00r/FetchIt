@@ -15,6 +15,7 @@ sub fetchImages {
     if($img->url_abs =~ /.+\.(jpg|png)$/) {
       my $filename = time.".$1";
       $m->follow_link(url =>  $img->url);
+      print 'Saving ', $img->url, ' to ', $filename, "\n";
       $m->save_content($filename);
       $m->back;
     }
