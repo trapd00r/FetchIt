@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+# FetchIt
+use strict;
+use Data::Dumper;
+use WWW::Mechanize;
+
+my $m = WWW::Mechanize->new;
+my $url = shift or die;
+my $notWanted = '(gif)';
+sub getit {
+  $m->get($url) or print $m->status;
+  my @images = $m->find_all_images;
+
+  foreach my $image(@images) {
+    print $m->status,': ', $image->url_abs, "\n" unless 
+      $image->url =~ /$notWanted/;
+
+    $m->get($image->url_abs);
+    my $extension;
+    if($image->url_abs =~ /.+\..+(\..{1,})$/) {
+      $extension = $1;
+    }
+    else {
+      $extension = ".imgfetch";
+    }
+    my $filename = time.$extension;
+    #my $filename = $image->url;
+    $m->save_content($filename) unless $extension =~ /$notWanted/;
+  }
+}
+
+&getit;
