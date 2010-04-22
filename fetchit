@@ -6,13 +6,14 @@ use WWW::Mechanize;
 
 my $m = WWW::Mechanize->new;
 my $url = shift or die;
+$m->agent_alias('Linux Mozilla');
 
 $m->get($url) or print $m->status;
 $m->quiet(1);
 
 sub fetchImages {
   foreach my $img($m->links) {
-    if($img->url_abs =~ /.+\.(jpg|png)$/) {
+     if($img->url_abs =~ /.+\/+(.+\.png|jpg|jpeg)$/) {
       my $filename = time.".$1";
       $m->follow_link(url =>  $img->url);
       print 'Saving ', $img->url, ' to ', $filename, "\n";
@@ -22,4 +23,4 @@ sub fetchImages {
   }
 }
 
-&fetchImages;
+fetchImages;
