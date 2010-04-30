@@ -11,9 +11,9 @@ $m->agent_alias('Linux Mozilla');
 $m->get($url) or print $m->status;
 $m->quiet(1);
 
-sub fetchImages {
+sub fetchMedia {
   foreach my $img($m->links) {
-     if($img->url_abs =~ /.+\/+(.+\.png|jpg|jpeg)$/) {
+     if($img->url_abs =~ /.+(.+\.png|jpg|jpeg|flv|wmv|avi)$/) {
       my $filename = time.".$1";
       $m->follow_link(url =>  $img->url);
       print 'Saving ', $img->url, ' to ', $filename, "\n";
@@ -23,4 +23,4 @@ sub fetchImages {
   }
 }
 
-fetchImages;
+fetchMedia;
